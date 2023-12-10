@@ -10,8 +10,11 @@ class Speaker extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'id' => 'integer',
+    protected $fillable = [
+        'name',
+        'email',
+        'bio',
+        'twitter_handle',
     ];
 
     public function conferences(): BelongsToMany
