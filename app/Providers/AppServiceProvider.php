@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Blueprint\Contracts\Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        EloquentModel::unguard();
     }
 }

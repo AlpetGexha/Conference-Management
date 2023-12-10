@@ -17,6 +17,7 @@
         "beyondcode/laravel-query-detector": "^1.8",
         "fakerphp/faker": "^1.9.1",
         "glhd/laravel-dumper": "^1.1",
+        "laravel-shift/blueprint": "^2.9",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
