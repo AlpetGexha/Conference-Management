@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-class Status
+enum Status: string
 {
-
+    case DRAFT = 'draft';
+    case PUBLISHED = 'published';
+    case ARCHIVED = 'archived';
 }

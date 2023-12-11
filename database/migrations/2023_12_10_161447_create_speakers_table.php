@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->text('bio');
+            $table->json('qualification');
             $table->string('twitter_handle');
             $table->timestamps();
         });

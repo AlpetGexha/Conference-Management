@@ -19,22 +19,64 @@ class SpeakerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('bio')
-                    ->required()
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('twitter_handle')
-                    ->required()
-                    ->maxLength(255),
-            ]);
+            ->schema(self::getForm());
+    }
+
+    public static function getForm(): array
+    {
+        return [
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('email')
+                ->email()
+                ->required()
+                ->maxLength(255),
+            Forms\Components\Textarea::make('bio')
+                ->required()
+                ->maxLength(65535)
+                ->columnSpanFull(),
+            Forms\Components\TextInput::make('twitter_handle')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\CheckboxList::make('qualification')
+                ->options(self::qualification())
+                ->descriptions(self::qualificationDescription())
+                ->searchable()
+                ->required()
+                ->columnSpanFull()
+                ->columns(3),
+        ];
+    }
+
+    public static function qualification(): array
+    {
+        return [
+            'business-leader' => 'Business Leader',
+            'charisma' => 'Charismatic Speaker',
+            'first-time' => 'First Time Speaker',
+            'hometown-hero' => 'Hometown Hero',
+            'humanitarian' => 'Works in Humanitarian Field',
+            'laracasts-contributor' => 'Laracasts Contributor',
+            'twitter-influencer' => 'Large Twitter Following',
+            'youtube-influencer' => 'Large YouTube Following',
+            'open-source' => 'Open Source Creator / Maintainer',
+            'unique-perspective' => 'Unique Perspective',
+        ];
+    }
+
+    public static function qualificationDescription(): array
+    {
+        return [
+            'business-leader' => 'Has been a business leader for at least 5 years.',
+            'charisma' => 'Has a charismatic speaking style.',
+            'first-time' => 'Has never spoken at a conference before.',
+            'laracasts-contributor' => 'Has contributed to Laracasts.',
+            'twitter-influencer' => 'Has a large following on Twitter.',
+            'youtube-influencer' => 'Has a large following on YouTube.',
+            'open-source' => 'Is an open source creator or maintainer.',
+            'unique-perspective' => 'Has a unique perspective to share.',
+        ];
     }
 
     public static function table(Table $table): Table

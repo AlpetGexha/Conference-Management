@@ -10,6 +10,10 @@ class Speaker extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'qualification' => 'array',
+    ];
+
     public function conferences(): BelongsToMany
     {
         return $this->belongsToMany(Conference::class);
