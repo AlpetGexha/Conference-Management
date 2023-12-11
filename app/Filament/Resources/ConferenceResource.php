@@ -23,39 +23,58 @@ class ConferenceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->label('Conference Name')
-                    ->default('My Conference')
-                    ->helperText('The name of the conference.')
-                    ->required()
-                    ->maxLength(60),
-                Forms\Components\MarkdownEditor::make('description')
-                    ->helperText('Hello')
-                    ->required(),
-                Forms\Components\DatePicker::make('start_date')
-                    ->native(false)
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end_date')
-                    ->native(false)
-                    ->required(),
-                Forms\Components\Checkbox::make('is_published')
-                    ->default(true),
-                Forms\Components\Select::make('status')
-                    ->options(Status::class)
-                    ->required(),
-                Forms\Components\Select::make('region')
-                    ->enum(Region::class)
-                    ->options(Region::class)
+                Forms\Components\Section::make('Conference Details')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Conference Name')
+                            ->default('My Conference')
+                            ->helperText('The name of the conference.')
+                            ->required()
+                            ->maxLength(60)
+                            ->columnSpanFull(),
+                        Forms\Components\MarkdownEditor::make('description')
+                            ->helperText('What is the conference about?')
+                            ->columnSpanFull(),
+                        Forms\Components\DatePicker::make('start_date')
+                            ->native(false)
+                            ->required(),
+                        Forms\Components\DateTimePicker::make('end_date')
+                            ->native(false)
+                            ->required(),
 
-                    ->reactive()
-                    ->required(),
-                Forms\Components\Select::make('venue_id')
-                    ->relationship('venue', 'name', fn (Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
-                    ->createOptionForm(VenueResource::getForm())
-                    ->editOptionForm(VenueResource::getForm())
-                    ->searchable()
-                    ->preload()
-                    ->required(),
+                        Forms\Components\Fieldset::make('status')
+                            ->label('Status')
+                            ->columns(1)
+                            ->schema([
+                                Forms\Components\Select::make('status')
+                                    ->options(Status::class)
+                                    ->required(),
+                                Forms\Components\Toggle::make('is_published')
+                                    ->default(true),
+                            ])
+                    ])
+                    ->columns(2)
+                    ->collapsed(false)
+                    ->description('The conference details.'),
+//                    ->icon('heroicon-o-information-circle'),
+
+                Forms\Components\Section::make('Location')
+                    ->schema([
+                        Forms\Components\Select::make('region')
+                            ->enum(Region::class)
+                            ->options(Region::class)
+                            ->reactive()
+                            ->required(),
+                        Forms\Components\Select::make('venue_id')
+                            ->relationship('venue', 'name', fn(Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
+                            ->createOptionForm(VenueResource::getForm())
+                            ->editOptionForm(VenueResource::getForm())
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->collapsed(false)
             ]);
     }
 
