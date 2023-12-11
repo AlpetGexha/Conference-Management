@@ -28,6 +28,15 @@ class SpeakerResource extends Resource
             Forms\Components\TextInput::make('name')
                 ->required()
                 ->maxLength(255),
+            Forms\Components\SpatieMediaLibraryFileUpload::make('avatar')
+                ->maxSize(1024 * 1024 * 10)
+                ->maxFiles(1)
+                ->avatar()
+                ->image()
+                ->imageEditor()
+                ->responsiveImages()
+                ->collection('avatars'),
+
             Forms\Components\TextInput::make('email')
                 ->email()
                 ->required()

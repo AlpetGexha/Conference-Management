@@ -42,6 +42,12 @@ class VenueResource extends Resource
                 ->enum(Region::class)
                 ->options(Region::class)
                 ->required(),
+            Forms\Components\SpatieMediaLibraryFileUpload::make('places')
+                ->maxSize(1024 * 1024 * 10)
+                ->image()
+                ->responsiveImages()
+                ->multiple()
+                ->collection('places'),
         ];
     }
 
