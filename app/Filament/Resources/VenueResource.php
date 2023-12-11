@@ -44,6 +44,7 @@ class VenueResource extends Resource
                 ->required(),
             Forms\Components\SpatieMediaLibraryFileUpload::make('places')
                 ->maxSize(1024 * 1024 * 10)
+                ->maxFiles(10)
                 ->image()
                 ->responsiveImages()
                 ->multiple()
