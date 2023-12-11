@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ConferenceResource\Pages;
-use App\Filament\Resources\ConferenceResource\RelationManagers;
 use App\Models\Conference;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -21,26 +20,35 @@ class ConferenceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('venue_id')
-                    ->relationship('venue', 'name'),
                 Forms\Components\TextInput::make('name')
+                    ->label('Conference Name')
+                    ->default('My Conference')
+                    ->helperText('The name of the conference.')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('start_date')
+                    ->maxLength(60),
+                Forms\Components\MarkdownEditor::make('description')
+                    ->helperText('Hello')
+                    ->required(),
+                Forms\Components\DatePicker::make('start_date')
+                    ->native(false)
                     ->required(),
                 Forms\Components\DateTimePicker::make('end_date')
+                    ->native(false)
                     ->required(),
-                Forms\Components\Toggle::make('is_published')
+                Forms\Components\Checkbox::make('is_published')
+                    ->default(true),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'archived' => 'Archived',
+                    ])
                     ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('region')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('venue_id')
+                    ->relationship('venue', 'name'),
             ]);
     }
 
@@ -48,9 +56,6 @@ class ConferenceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('venue.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
@@ -61,12 +66,13 @@ class ConferenceResource extends Resource
                 Tables\Columns\TextColumn::make('end_date')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_published')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('region')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('venue.name')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -80,7 +86,6 @@ class ConferenceResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -102,7 +107,6 @@ class ConferenceResource extends Resource
         return [
             'index' => Pages\ListConferences::route('/'),
             'create' => Pages\CreateConference::route('/create'),
-            'view' => Pages\ViewConference::route('/{record}'),
             'edit' => Pages\EditConference::route('/{record}/edit'),
         ];
     }
