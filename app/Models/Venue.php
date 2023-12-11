@@ -10,13 +10,6 @@ class Venue extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'city',
-        'country',
-        'postal_code',
-    ];
-
     public function conferences(): HasMany
     {
         return $this->hasMany(Conference::class);

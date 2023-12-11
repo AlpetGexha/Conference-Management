@@ -10,13 +10,6 @@ class Speaker extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'bio',
-        'twitter_handle',
-    ];
-
     public function conferences(): BelongsToMany
     {
         return $this->belongsToMany(Conference::class);

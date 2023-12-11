@@ -11,12 +11,6 @@ class Talk extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'abstract',
-        'speaker_id',
-    ];
-
     public function speaker(): BelongsTo
     {
         return $this->belongsTo(Speaker::class);

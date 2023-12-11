@@ -11,16 +11,6 @@ class Conference extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'starts_at',
-        'ends_at',
-        'status',
-        'venue_id',
-    ];
-
     public function venue(): BelongsTo
     {
         return $this->belongsTo(Venue::class);
