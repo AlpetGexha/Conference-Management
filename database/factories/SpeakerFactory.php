@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Filament\Resources\SpeakerResource;
 use App\Models\Speaker;
+use App\Models\Talk;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SpeakerFactory extends Factory
@@ -23,11 +25,15 @@ class SpeakerFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->safeEmail(),
             'bio' => $this->faker->text(),
-            'qualification' => [
-                'certification' => $this->faker->word(),
-                'experience' => $this->faker->word(),
-            ],
+            'qualification' => $this->faker->randomElements(
+                array_keys(SpeakerResource::qualification()), rand(1, 10)
+            ),
             'twitter_handle' => $this->faker->word(),
         ];
+    }
+
+    public function withTalks(int $count = 1): self
+    {
+        return $this->has(Talk::factory()->count($count), 'talks');
     }
 }
