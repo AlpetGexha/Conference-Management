@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\TalkStatus;
 use App\Filament\Resources\SpeakerResource\Pages;
+use App\Filament\Resources\SpeakerResource\RelationManagers\ConferencesRelationManager;
 use App\Filament\Resources\SpeakerResource\RelationManagers\TalkRelationManager;
 use App\Models\Speaker;
 use Filament\Forms;
@@ -182,6 +183,7 @@ class SpeakerResource extends Resource
     {
         return [
             TalkRelationManager::class,
+            ConferencesRelationManager::class
         ];
     }
 
