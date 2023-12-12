@@ -120,9 +120,10 @@ class ConferenceResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('attendees_count')
-                    ->label('People Attending')
-                    ->counts('attendees')
+                    ->label('Attending')
+                    ->alignCenter()
                     ->sortable()
+                    ->counts('attendees')
             ])
             ->filters([
                 //
