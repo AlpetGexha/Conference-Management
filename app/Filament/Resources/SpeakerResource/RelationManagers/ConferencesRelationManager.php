@@ -32,7 +32,7 @@ class ConferencesRelationManager extends RelationManager
                     ->badge(),
                 Tables\Columns\TextColumn::make('region')
                     ->badge(),
-                Tables\Columns\TextColumn::make('venue.name')
+                Tables\Columns\TextColumn::make('venue.name'),
             ])
             ->filters([
                 //

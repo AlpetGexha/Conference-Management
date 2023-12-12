@@ -24,9 +24,8 @@ class AppServiceProvider extends ServiceProvider
     {
         EloquentModel::unguard();
 
+        CreateAction::configureUsing(fn (CreateAction $action) => $action->slideOver());
 
-        CreateAction::configureUsing(fn(CreateAction $action) => $action->slideOver());
-
-        EditAction::configureUsing(fn(EditAction $action) => $action->slideOver());
+        EditAction::configureUsing(fn (EditAction $action) => $action->slideOver());
     }
 }

@@ -15,7 +15,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 
-class ConferenceSignUpPage extends Component implements HasForms, HasActions
+class ConferenceSignUpPage extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 

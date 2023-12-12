@@ -163,6 +163,7 @@ class SpeakerResource extends Resource
                                         if ($state === 'Previous Speaker') {
                                             return 'success';
                                         }
+
                                         return 'primary';
                                     }),
                             ]),
@@ -174,16 +175,15 @@ class SpeakerResource extends Resource
                             ->markdown(),
                         TextEntry::make('qualification')
                             ->badge(),
-                    ])
+                    ]),
             ]);
     }
-
 
     public static function getRelations(): array
     {
         return [
             TalkRelationManager::class,
-            ConferencesRelationManager::class
+            ConferencesRelationManager::class,
         ];
     }
 
@@ -193,7 +193,7 @@ class SpeakerResource extends Resource
             'index' => Pages\ListSpeakers::route('/'),
             'create' => Pages\CreateSpeaker::route('/create'),
             'view' => Pages\ViewSpeaker::route('/{record}'),
-//            'edit' => Pages\EditSpeaker::route('/{record}/edit'),
+            //            'edit' => Pages\EditSpeaker::route('/{record}/edit'),
         ];
     }
 }

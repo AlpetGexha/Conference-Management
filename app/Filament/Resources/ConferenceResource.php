@@ -51,12 +51,12 @@ class ConferenceResource extends Resource
                                     ->required(),
                                 Forms\Components\Toggle::make('is_published')
                                     ->default(true),
-                            ])
+                            ]),
                     ])
                     ->columns(2)
                     ->collapsed(false)
                     ->description('The conference details.'),
-//                    ->icon('heroicon-o-information-circle'),
+                //                    ->icon('heroicon-o-information-circle'),
 
                 Forms\Components\Section::make('Location')
                     ->schema([
@@ -66,7 +66,7 @@ class ConferenceResource extends Resource
                             ->reactive()
                             ->required(),
                         Forms\Components\Select::make('venue_id')
-                            ->relationship('venue', 'name', fn(Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
+                            ->relationship('venue', 'name', fn (Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
                             ->createOptionForm(VenueResource::getForm())
                             ->editOptionForm(VenueResource::getForm())
                             ->searchable()
@@ -74,7 +74,7 @@ class ConferenceResource extends Resource
                             ->required(),
                     ])
                     ->columns(2)
-                    ->collapsed(false)
+                    ->collapsed(false),
             ]);
     }
 

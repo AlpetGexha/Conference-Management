@@ -32,7 +32,7 @@ class TalkRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\TextColumn::make('status')
-                    ->badge()
+                    ->badge(),
             ])
             ->filters([
                 //

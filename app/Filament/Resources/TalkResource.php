@@ -48,20 +48,20 @@ class TalkResource extends Resource
                         ->columnSpanFull(),
                 ])
                 ->columns(2)
-                ->columnSpan(['lg' => fn(?Talk $record) => $record === null ? 3 : 2]),
+                ->columnSpan(['lg' => fn (?Talk $record) => $record === null ? 3 : 2]),
 
             Forms\Components\Section::make()
                 ->schema([
                     Forms\Components\Placeholder::make('created_at')
                         ->label('Created at')
-                        ->content(fn(Talk $record): ?string => $record->created_at?->diffForHumans()),
+                        ->content(fn (Talk $record): ?string => $record->created_at?->diffForHumans()),
 
                     Forms\Components\Placeholder::make('updated_at')
                         ->label('Last modified at')
-                        ->content(fn(Talk $record): ?string => $record->updated_at?->diffForHumans()),
+                        ->content(fn (Talk $record): ?string => $record->updated_at?->diffForHumans()),
                 ])
                 ->columnSpan(['lg' => 1])
-                ->hidden(fn(?Talk $record) => $record === null),
+                ->hidden(fn (?Talk $record) => $record === null),
         ];
     }
 
@@ -111,12 +111,12 @@ class TalkResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()->slideOver(),
                 Tables\Actions\DeleteAction::make(),
-//                Tables\Actions\ActionGroup::make([
-//                    //                    Tables\Actions\ViewAction::make(),
-//                    StatusApprovedAction::make(),
-//                    StatusSubmittedAction::make(),
-//                    StatusRejectedAction::make(),
-//                ]),
+                //                Tables\Actions\ActionGroup::make([
+                //                    //                    Tables\Actions\ViewAction::make(),
+                //                    StatusApprovedAction::make(),
+                //                    StatusSubmittedAction::make(),
+                //                    StatusRejectedAction::make(),
+                //                ]),
                 StatusAction::make(),
             ])
             ->bulkActions([

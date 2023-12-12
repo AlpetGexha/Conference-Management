@@ -20,7 +20,7 @@ class Attendee extends Model
                     ->required()->maxLength(255),
                 TextInput::make('email')
                     ->email()->required()->maxLength(255),
-            ])
+            ]),
         ];
     }
 
