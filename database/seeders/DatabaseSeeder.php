@@ -9,8 +9,11 @@ use App\Models\Speaker;
 use App\Models\Talk;
 use App\Models\User;
 use App\Models\Venue;
+use Closure;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,7 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (! User::where('email', 'admin@admin.com')->exists()) {
+        if (!User::where('email', 'admin@admin.com')->exists()) {
             User::factory()->create([
                 'name' => 'admin',
                 'email' => 'admin@admin.com',
@@ -27,9 +30,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $venues = Venue::factory(50)->create();
+        $venues = $this->withProgressBar(20, fn() => Venue::factory(50)->create());
+        $talks = $this->withProgressBar(20, fn() => Talk::factory(50)->create());
 
-        $talk = Talk::factory(500)->create();
 
         $speaker = Speaker::factory(500)
             ->withTalks(3)
@@ -40,14 +43,46 @@ class DatabaseSeeder extends Seeder
             )
             ->create();
 
-        $conference = Conference::factory(20)
+        $speakers = $this->withProgressBar(40, fn() => Speaker::factory(3)
+            ->withTalks(2)
+            ->recycle(
+                Conference::factory(2)
+                    ->recycle($venues)
+                    ->create()
+            )
+            ->create());
+
+        $conferences = $this->withProgressBar(20, fn() => Conference::factory(4)
             ->recycle($venues)
             ->hasAttached($speaker)
-            ->hasAttached($talk)
-            ->create();
+            ->hasAttached($talks)
+            ->create());
 
-        $attendee = Attendee::factory(1000)
-            ->recycle($conference)
-            ->create();
+        $attendees = $this->withProgressBar(20, fn() => Attendee::factory(1000)
+            ->recycle($conferences)
+            ->create());
+    }
+
+
+    protected function withProgressBar(int $amount, Closure $createCollectionOfOne): Collection
+    {
+        $progressBar = new ProgressBar($this->command->getOutput(), $amount);
+
+        $progressBar->start();
+
+        $items = new Collection();
+
+        foreach (range(1, $amount) as $i) {
+            $items = $items->merge(
+                $createCollectionOfOne()
+            );
+            $progressBar->advance();
+        }
+
+        $progressBar->finish();
+
+        $this->command->getOutput()->writeln('');
+
+        return $items;
     }
 }

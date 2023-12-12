@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class ConferenceResource extends Resource
 {
@@ -66,7 +67,7 @@ class ConferenceResource extends Resource
                             ->reactive()
                             ->required(),
                         Forms\Components\Select::make('venue_id')
-                            ->relationship('venue', 'name', fn (Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
+                            ->relationship('venue', 'name', fn(Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
                             ->createOptionForm(VenueResource::getForm())
                             ->editOptionForm(VenueResource::getForm())
                             ->searchable()
@@ -74,6 +75,22 @@ class ConferenceResource extends Resource
                             ->required(),
                     ])
                     ->columns(2)
+                    ->collapsed(false),
+
+                Forms\Components\Section::make('Thumbnail')
+                    ->schema([
+                        Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')
+                            ->label('Thumbnail for the conference')
+                            ->maxSize(1024 * 1024 * 10)
+                            ->maxFiles(1)
+                            ->image()
+                            ->imageEditor()
+                            ->responsiveImages()
+                            ->collection('avatars')
+                            ->required()
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpanFull()
                     ->collapsed(false),
             ]);
     }
@@ -83,9 +100,10 @@ class ConferenceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
+                    ->searchable()
+                    ->description(function (Conference $record) {
+                        return Str::of($record->description)->limit(45);
+                    }),
                 Tables\Columns\TextColumn::make('start_date')
                     ->dateTime()
                     ->sortable(),
@@ -93,26 +111,28 @@ class ConferenceResource extends Resource
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('region')
+                    ->badge()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('venue.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('attendees_count')
+                    ->label('People Attending')
+                    ->counts('attendees')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make()->slideOver(),
+                    Tables\Actions\DeleteAction::make()->requiresConfirmation()
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -134,6 +154,7 @@ class ConferenceResource extends Resource
             'index' => Pages\ListConferences::route('/'),
             'create' => Pages\CreateConference::route('/create'),
             'edit' => Pages\EditConference::route('/{record}/edit'),
+            'view' => Pages\ViewConference::route('/{record}'),
         ];
     }
 }

@@ -140,7 +140,7 @@ class TalkResource extends Resource
             'index' => Pages\ListTalks::route('/'),
             'create' => Pages\CreateTalk::route('/create'),
             'view' => Pages\ViewTalk::route('/{record}'),
-            'edit' => Pages\EditTalk::route('/{record}/edit'),
+//            'edit' => Pages\EditTalk::route('/{record}/edit'),
         ];
     }
 }

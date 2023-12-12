@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Region;
+use App\Enums\Status;
 use App\Models\Conference;
 use App\Models\Venue;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,7 +27,7 @@ class ConferenceFactory extends Factory
             'description' => $this->faker->realText(),
             'start_date' => $this->faker->dateTime(),
             'end_date' => $this->faker->dateTime(),
-            'status' => $this->faker->word(),
+            'status' => $this->faker->randomElement(Status::class),
             'region' => $this->faker->randomElement(Region::class),
             'venue_id' => Venue::factory(),
             'is_published' => $this->faker->boolean(20),

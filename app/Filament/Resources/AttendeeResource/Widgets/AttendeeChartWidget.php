@@ -15,12 +15,17 @@ class AttendeeChartWidget extends ChartWidget
     protected static ?string $heading = 'Attendee Signups';
     protected static ?string $pollingInterval = null;
     protected static ?string $maxHeight = '200px';
+
     public ?string $filter = '3months';
     protected int|string|array $columnSpan = 'full';
 
     protected function getFilters(): ?array
     {
-        return Trend::filterType();
+        return [
+            'week' => 'Last Week',
+            'month' => 'Last Month',
+            '3months' => 'Last 3 Months',
+        ];
     }
 
     protected function getTablePage(): string
@@ -34,7 +39,7 @@ class AttendeeChartWidget extends ChartWidget
 
         $query = $this->getPageTableQuery();
         $query->getQuery()->orders = [];
-        
+
         match ($filter) {
             'week' => $data = Trend::query($query)
                 ->between(
@@ -63,10 +68,10 @@ class AttendeeChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Signups',
-                    'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
+                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels' => $data->map(fn(TrendValue $value) => $value->date),
+            'labels' => $data->map(fn (TrendValue $value) => $value->date),
         ];
     }
 
