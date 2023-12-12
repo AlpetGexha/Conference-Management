@@ -16,8 +16,9 @@ class AttendeeFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->safeEmail(),
-            'ticket_cost' => 50000,
-            'is_paid' => true,
+            'ticket_cost' => $this->faker->numberBetween(100, 1000),
+            'is_paid' => $this->faker->boolean(80),
+            'conference_id' => Conference::factory(),
         ];
     }
 

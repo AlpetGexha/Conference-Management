@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         $attendee = Attendee::factory(200)
-            ->forConference($conference->random()->first())
+            ->recycle($conference)
             ->create();
     }
 }
