@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\ImageGenerateAction;
+use App\Actions\StatusApprovedAction;
+use App\Actions\StatusRejectedAction;
+use App\Actions\StatusSubmittedAction;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Models\Talk;
 use Filament\Forms;
@@ -9,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class TalkResource extends Resource
 {
@@ -37,32 +42,61 @@ class TalkResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('speaker.name')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('speaker.avatar')
+                    ->circular()
+                    ->collection('avatars')
+                    ->defaultImageUrl(function (Talk $record) {
+                        return ImageGenerateAction::handle(urlencode($record->speaker->name));
+                    }),
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->searchable()
+                    ->description(function (Talk $record) {
+                        return Str::of($record->abstract)->limit(45);
+                    }),
+                Tables\Columns\TextColumn::make('speaker.name')
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('new_talk')
+                    ->boolean()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\IconColumn::make('length')
+                    ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('new_talk'),
+                Tables\Filters\SelectFilter::make('speaker')
+                    ->relationship('speaker', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
+                //                Tables\Filters\Filter::make('speaker.avatar')
+                //                     ->label('Has Avatar')
+                //                    ->query(function ($query) {
+                //                        return $query->whereHas('speaker.media', function ($query) {
+                //                            return $query->where('collection_name', 'avatars');
+                //                        });
+                //                    })
+                //                    ->toggle()
+
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->slideOver(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    //                    Tables\Actions\ViewAction::make(),
+                    StatusApprovedAction::make(),
+                    StatusSubmittedAction::make(),
+                    StatusRejectedAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->persistFiltersInSession();
     }
 
     public static function getRelations(): array
@@ -77,7 +111,7 @@ class TalkResource extends Resource
         return [
             'index' => Pages\ListTalks::route('/'),
             'create' => Pages\CreateTalk::route('/create'),
-            'view' => Pages\ViewTalk::route('/{record}'),
+            //            'view' => Pages\ViewTalk::route('/{record}'),
             'edit' => Pages\EditTalk::route('/{record}/edit'),
         ];
     }

@@ -4,16 +4,14 @@ namespace App\Actions;
 
 use Filament\Tables\Actions\ActionGroup;
 
-class SatusAction
+class StatusAction
 {
-
-    public static function make(): void
+    public static function make(): ActionGroup
     {
-        ActionGroup::make([
+        return ActionGroup::make([
             StatusApprovedAction::make(),
             StatusRejectedAction::make(),
             StatusSubmittedAction::make(),
         ]);
     }
-
 }

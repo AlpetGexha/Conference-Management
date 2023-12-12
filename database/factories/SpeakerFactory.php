@@ -34,6 +34,6 @@ class SpeakerFactory extends Factory
 
     public function withTalks(int $count = 1): self
     {
-        return $this->has(Talk::factory()->count($count), 'talks');
+        return $this->has(Talk::factory()->count(rand(0, $count)), 'talks');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Closure;
+use Exception;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -18,10 +19,10 @@ class FactoryAction extends Action
         return 'generate';
     }
 
-    public function action(Closure | string | null $action): static
+    public function action(Closure|string|null $action): static
     {
         if ($action !== 'createFactory') {
-            throw new \Exception('You\'re unable to override the action for this plugin');
+            throw new Exception('You\'re unable to override the action for this plugin');
         }
 
         $this->action = $this->createFactory();
@@ -29,9 +30,23 @@ class FactoryAction extends Action
         return $this;
     }
 
-    public function form(array | Closure | null $form): static
+    public function form(array|Closure|null $form): static
     {
         $this->form = $this->getDefaultForm();
+
+        return $this;
+    }
+
+    public function hasMany(array $relations): static
+    {
+        $this->hasManyRelations = $relations;
+
+        return $this;
+    }
+
+    public function belongsToMany(array $relations): static
+    {
+        $this->belongsToManyRelations = $relations;
 
         return $this;
     }
@@ -70,20 +85,6 @@ class FactoryAction extends Action
                 ->native(false)
                 ->multiple(),
         ];
-    }
-
-    public function hasMany(array $relations): static
-    {
-        $this->hasManyRelations = $relations;
-
-        return $this;
-    }
-
-    public function belongsToMany(array $relations): static
-    {
-        $this->belongsToManyRelations = $relations;
-
-        return $this;
     }
 
     protected function setUp(): void

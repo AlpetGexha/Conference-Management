@@ -58,6 +58,7 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+        //            ->spa();
     }
 
     public function register(): void

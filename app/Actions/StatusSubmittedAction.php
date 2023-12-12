@@ -3,12 +3,14 @@
 namespace App\Actions;
 
 use App\Enums\TalkStatus;
+use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
 
-class StatsSubmittedAction extends Action
+class StatusSubmittedAction extends Action
 {
+    use CanCustomizeProcess;
 
     public static function getDefaultName(): ?string
     {
@@ -21,7 +23,7 @@ class StatsSubmittedAction extends Action
 
         $this->label(__('Submitted'));
 
-        $this->modalHeading(fn(): string => __('Submitted'));
+        $this->modalHeading(fn (): string => __('Submitted'));
 
         $this->modalSubmitActionLabel(__('Submitted'));
 
@@ -36,9 +38,9 @@ class StatsSubmittedAction extends Action
         $this->modalIcon('heroicon-o-check-circle');
 
         $this->action(function (): void {
-            $result = $this->process(static fn(Model $record) => $record->submitted());
+            $result = $this->process(static fn (Model $record) => $record->submitted());
 
-            if (!$result) {
+            if (! $result) {
                 $this->failure();
 
                 return;
@@ -60,6 +62,4 @@ class StatsSubmittedAction extends Action
             return $record->status === TalkStatus::SUBMITTED;
         });
     }
-
-
 }
