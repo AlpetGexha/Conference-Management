@@ -25,4 +25,9 @@ class Conference extends Model
     {
         return $this->belongsToMany(Talk::class);
     }
+
+    public function attendees(): BelongsTo
+    {
+        return $this->belongsTo(Attendee::class);
+    }
 }
