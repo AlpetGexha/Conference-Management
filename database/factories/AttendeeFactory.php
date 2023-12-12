@@ -19,6 +19,7 @@ class AttendeeFactory extends Factory
             'ticket_cost' => $this->faker->numberBetween(100, 1000),
             'is_paid' => $this->faker->boolean(80),
             'conference_id' => Conference::factory(),
+            'created_at' => $this->faker->dateTimeBetween('-3 months', 'now'),
         ];
     }
 

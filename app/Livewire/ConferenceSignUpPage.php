@@ -14,17 +14,18 @@ use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
+use Number;
 
 class ConferenceSignUpPage extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
-    public int $conferenceId;
+    public int $conference_id;
     public int $price = 50000;
 
     public function mount()
     {
-        $this->conferenceId = 1;
+        $this->conference_id = 1;
     }
 
     public function signUpAction(): Action
@@ -35,7 +36,7 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
                 Placeholder::make('total_price')
                     ->hiddenLabel()
                     ->content(function (Get $get) {
-                        return '$' . count($get('attendees')) * 500;
+                        return Number::currency(count($get('attendees')) * 500, 'EUR');
                     }),
                 Repeater::make('attendees')
                     ->schema(Attendee::getForm()),
@@ -43,7 +44,7 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
             ->action(function (array $data) {
                 collect($data['attendees'])->each(function ($data) {
                     Attendee::create([
-                        'conference_id' => $this->conferenceId,
+                        'conference_id' => $this->conference_id,
                         'ticket_cost' => $this->price,
                         'name' => $data['name'],
                         'email' => $data['email'],
@@ -53,7 +54,8 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
             })
             ->after(function () {
                 Notification::make()->success()->title('Success!')
-                    ->body(new HtmlString('You have successfully signed up for the conference.'))->send();
+                    ->body(new HtmlString('You have successfully signed up for the conference.'))
+                    ->send();
             });
     }
 

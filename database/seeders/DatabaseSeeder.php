@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             ->hasAttached($talk)
             ->create();
 
-        $attendee = Attendee::factory(200)
+        $attendee = Attendee::factory(1000)
             ->recycle($conference)
             ->create();
     }
