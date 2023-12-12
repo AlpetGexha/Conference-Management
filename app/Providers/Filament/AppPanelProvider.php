@@ -57,8 +57,8 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
-        //            ->spa();
+            ])
+            ->sidebarCollapsibleOnDesktop();
     }
 
     public function register(): void

@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Actions\ImageGenerateAction;
-use App\Actions\StatusApprovedAction;
-use App\Actions\StatusRejectedAction;
-use App\Actions\StatusSubmittedAction;
+use App\Actions\StatusAction;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Models\Talk;
 use Filament\Forms;
@@ -24,18 +22,47 @@ class TalkResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\Select::make('speaker_id')
-                    ->relationship('speaker', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('abstract')
-                    ->required()
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-            ]);
+            ->schema(static::getForm())
+            ->columns(3);
+    }
+
+    public static function getForm($speaker_id = null): array
+    {
+        return [
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Select::make('speaker_id')
+                        ->relationship('speaker', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->required()
+                        ->hidden(function () use ($speaker_id) {
+                            return $speaker_id !== null;
+                        }),
+                    Forms\Components\TextInput::make('title')
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\MarkdownEditor::make('abstract')
+                        ->required()
+                        ->maxLength(65535)
+                        ->columnSpanFull(),
+                ])
+                ->columns(2)
+                ->columnSpan(['lg' => fn(?Talk $record) => $record === null ? 3 : 2]),
+
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\Placeholder::make('created_at')
+                        ->label('Created at')
+                        ->content(fn(Talk $record): ?string => $record->created_at?->diffForHumans()),
+
+                    Forms\Components\Placeholder::make('updated_at')
+                        ->label('Last modified at')
+                        ->content(fn(Talk $record): ?string => $record->updated_at?->diffForHumans()),
+                ])
+                ->columnSpan(['lg' => 1])
+                ->hidden(fn(?Talk $record) => $record === null),
+        ];
     }
 
     public static function table(Table $table): Table
@@ -84,12 +111,13 @@ class TalkResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()->slideOver(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ActionGroup::make([
-                    //                    Tables\Actions\ViewAction::make(),
-                    StatusApprovedAction::make(),
-                    StatusSubmittedAction::make(),
-                    StatusRejectedAction::make(),
-                ]),
+//                Tables\Actions\ActionGroup::make([
+//                    //                    Tables\Actions\ViewAction::make(),
+//                    StatusApprovedAction::make(),
+//                    StatusSubmittedAction::make(),
+//                    StatusRejectedAction::make(),
+//                ]),
+                StatusAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -111,7 +139,7 @@ class TalkResource extends Resource
         return [
             'index' => Pages\ListTalks::route('/'),
             'create' => Pages\CreateTalk::route('/create'),
-            //            'view' => Pages\ViewTalk::route('/{record}'),
+            'view' => Pages\ViewTalk::route('/{record}'),
             'edit' => Pages\EditTalk::route('/{record}/edit'),
         ];
     }

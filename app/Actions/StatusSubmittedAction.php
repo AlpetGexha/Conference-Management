@@ -29,13 +29,13 @@ class StatusSubmittedAction extends Action
 
         $this->successNotificationTitle(__('Submitted'));
 
-        $this->color('success');
+        $this->color('primary');
 
         $this->icon('heroicon-o-check-circle');
 
         $this->requiresConfirmation();
 
-        $this->modalIcon('heroicon-o-check-circle');
+        $this->modalIcon('heroicon-o-clock');
 
         $this->action(function (): void {
             $result = $this->process(static fn (Model $record) => $record->submitted());

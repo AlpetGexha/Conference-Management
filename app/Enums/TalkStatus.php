@@ -14,8 +14,8 @@ enum TalkStatus: string implements HasColor, HasIcon
     public function getColor(): string
     {
         return match ($this) {
-            self::APPROVED => 'success',
             self::SUBMITTED => 'primary',
+            self::APPROVED => 'success',
             self::REJECTED => 'danger',
         };
     }
@@ -23,8 +23,8 @@ enum TalkStatus: string implements HasColor, HasIcon
     public function getIcon(): string
     {
         return match ($this) {
-            self::APPROVED => 'heroicon-o-check-circle',
             self::SUBMITTED => 'heroicon-o-clock',
+            self::APPROVED => 'heroicon-o-check-circle',
             self::REJECTED => 'heroicon-o-x-circle',
         };
     }
