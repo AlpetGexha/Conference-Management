@@ -6,6 +6,7 @@ use App\Filament\Pages\Login;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -30,12 +31,18 @@ class AppPanelProvider extends PanelProvider
             ->id('app')
             ->path('app')
             ->login(Login::class)
+            ->registration()
+            ->passwordReset()
+            ->brandName('Not AlpetG')
             ->colors([
                 'primary' => Color::Indigo,
                 'gray' => Color::Slate,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->navigationGroups([
+                NavigationGroup::make('Conference')->icon('heroicon-o-user-group'),
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])
@@ -59,7 +66,8 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
 //            ->spa()
-            ->sidebarCollapsibleOnDesktop();
+            ->sidebarCollapsibleOnDesktop()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k']);
     }
 
     public function register(): void
