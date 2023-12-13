@@ -20,6 +20,15 @@ class ConferenceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static int $globalSearchResultsLimit = 10;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -67,7 +76,7 @@ class ConferenceResource extends Resource
                             ->reactive()
                             ->required(),
                         Forms\Components\Select::make('venue_id')
-                            ->relationship('venue', 'name', fn(Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
+                            ->relationship('venue', 'name', fn (Builder $query, Forms\Get $get) => $query->where('region', $get('region')))
                             ->createOptionForm(VenueResource::getForm())
                             ->editOptionForm(VenueResource::getForm())
                             ->searchable()
@@ -123,7 +132,7 @@ class ConferenceResource extends Resource
                     ->label('Attending')
                     ->alignCenter()
                     ->sortable()
-                    ->counts('attendees')
+                    ->counts('attendees'),
             ])
             ->filters([
                 //
@@ -132,8 +141,8 @@ class ConferenceResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make()->slideOver(),
-                    Tables\Actions\DeleteAction::make()->requiresConfirmation()
-                ])
+                    Tables\Actions\DeleteAction::make()->requiresConfirmation(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

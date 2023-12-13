@@ -17,12 +17,17 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class SpeakerResource extends Resource
 {
     protected static ?string $model = Speaker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static int $globalSearchResultsLimit = 10;
 
     public static function form(Form $form): Form
     {
@@ -194,6 +199,14 @@ class SpeakerResource extends Resource
             'create' => Pages\CreateSpeaker::route('/create'),
             'view' => Pages\ViewSpeaker::route('/{record}'),
             //            'edit' => Pages\EditSpeaker::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'email' => $record->email,
+            'twitter_handle' => $record->twitter_handle,
         ];
     }
 }

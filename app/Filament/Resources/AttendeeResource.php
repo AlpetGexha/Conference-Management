@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AttendeeResource\Pages;
-use App\Filament\Resources\AttendeeResource\RelationManagers;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeeChartWidget;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeeStats;
 use App\Models\Attendee;
@@ -18,6 +17,7 @@ class AttendeeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    //    protected static ?string $navigationGroup = 'Conference';
     public static function form(Form $form): Form
     {
         return $form
@@ -45,7 +45,7 @@ class AttendeeResource extends Resource
                 //
             ])
             ->actions([
-//                Tables\Actions\EditAction::make(),
+                //                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -58,7 +58,7 @@ class AttendeeResource extends Resource
     {
         return [
             AttendeeStats::class,
-            AttendeeChartWidget::class
+            AttendeeChartWidget::class,
         ];
     }
 
