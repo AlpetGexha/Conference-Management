@@ -32,7 +32,8 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->login(Login::class)
             ->registration()
-            ->passwordReset()
+//            ->passwordReset()
+            ->profile()
             ->brandName('Not AlpetG')
             ->colors([
                 'primary' => Color::Indigo,
