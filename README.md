@@ -1,13 +1,9 @@
 # Conference Management
 
-### Short Descroption
+![screencapture-127-0-0-1-8000-app-attendees-2024-06-25-02_16_50](https://github.com/AlpetGexha/Rapid/assets/50520333/60a6a1ea-14e9-4fcc-b9e1-ffe8c518f8a1)
 
 Our application enables you to create and manage conferences effortlessly. Organize speaker talks, attendees, and venues with ease. Additionally, generate API tokens for seamless integration with other systems. Enhance your event planning and execution with our comprehensive, user-friendly solution.
 
-### Technologies Used
-
-- Laravel
-- Filamentphp
 
 ### Features
 
