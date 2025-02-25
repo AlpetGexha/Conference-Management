@@ -30,8 +30,10 @@
               </span>
                         </a>
                     </div>
-                    <h1 class="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">Deploy to the cloud with confidence</h1>
-                    <p class="mt-6 text-lg leading-8 text-gray-300">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
+                    <h1 class="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">Reserve your Spot to the best converece</h1>
+                    <p class="mt-6 text-lg leading-8 text-gray-300">
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, enim perspiciatis qui ipsum cupiditate illum dolor ad sint doloremque quas delectus natus itaque dicta dolores saepe exercitationem quisquam odit facilis!
+                    </p>
                     <div class="mt-10 flex items-center gap-x-6">
                         {{ $this->signUpAction }}
                     </div>

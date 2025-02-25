@@ -21,6 +21,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Rupadana\ApiService\ApiServicePlugin;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -32,12 +33,12 @@ class AppPanelProvider extends PanelProvider
             ->path('app')
             ->login(Login::class)
             ->registration()
-//            ->passwordReset()
+            //            ->passwordReset()
             ->profile()
             ->brandName('Not AlpetG')
             ->colors([
                 'primary' => Color::Indigo,
-                'gray' => Color::Slate,
+                'gray' => Color::Slate, 
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -66,7 +67,10 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-//            ->spa()
+            //            ->spa()
+            ->plugins([
+                ApiServicePlugin::make()
+            ])
             ->sidebarCollapsibleOnDesktop()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k']);
     }
